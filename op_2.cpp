@@ -1,6 +1,7 @@
 ﻿#include <iostream>
 #include <vector>
 #include <algorithm>
+#include <conio.h>
 using namespace std;
 
 
@@ -81,17 +82,20 @@ int main()
 	ClientVector.push_back(ptrC3);
 
 	bool tmp = false;
+	int choice = -1;
+
+	
 
 	while (!tmp)
 	{
-		cout << "1. Client" << "\n2. Staff" << "\n0" << endl;
-		int choice;
-		cout << "Enter the number: " << endl;
-		cin >> choice;
+		system("cls");
+		cout << "1. Client" << "\n2. Staff" << "\n0. Exit" << endl;
+		choice = _getch() - 48;
 		switch (choice)
 		{
 		case 1:
 		{
+			system("cls");
 			string FName, LName;
 			int Ag, Id;
 
@@ -114,10 +118,11 @@ int main()
 			bool var = false;
 			while (!var)
 			{
+				system("cls");
 				int num;
 				cout << "What woulde you like? Please enter number." << endl;
-				cout << "1. Credit.\n2. Debit.\n0. Quite." << endl;
-				cin >> num;
+				cout << "1. Credit.\n2. Debit.\n0. Back." << endl;
+				num = _getch() - 48;
 				switch (num)
 				{
 				case 1:
@@ -142,7 +147,7 @@ int main()
 					var++;
 					break;
 				default:
-					cout << "Your choice is incorrect. Please enter the number again." << endl;
+					//cout << "Your choice is incorrect. Please enter the number again." << endl;
 					break;
 				}
 			}
@@ -152,11 +157,11 @@ int main()
 
 		case 2:
 		{
-			cout << "\n1. Print the clients" << "\n0. Quite" << endl;
-			cout << "Enter the number" << endl;
+			system("cls");
+			cout << "1. Print the clients" << "\n0. Back" << endl;
 			bool var1 = false;
 			int num1;
-			cin >> num1;
+			num1 = _getch() - 48;
 			while (!var1)
 			{
 				switch (num1)
@@ -171,7 +176,7 @@ int main()
 					var1++;
 					break;
 				default:
-					cout << "Your choice is incorrect. Please enter the number again." << endl;
+					//cout << "Your choice is incorrect. Please enter the number again." << endl;
 					break;
 				}
 			}
@@ -184,7 +189,7 @@ int main()
 		}
 			break;
 		default:
-			cout << "Your choice is incorrect. Please enter the number again." << endl;
+			//cout << "Your choice is incorrect. Please enter the number again." << endl;
 			break;
 		}
 
