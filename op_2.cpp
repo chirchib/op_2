@@ -21,6 +21,7 @@ public:
 	void getFullInf() const
 	{
 		cout << Age << "\t" <<LastName << "\t" << FirstName << endl;
+		return;
 	}
 
 };
@@ -32,18 +33,6 @@ public:
 	{
 		ptrP->getFullInf();
 	}
-};
-
-class Staff : public Account
-{
-private:
-	
-
-public:
-	Staff(int id, string Last_Name, string  First_Name, int Age_) : Account(id, Last_Name, First_Name, Age_)
-	{}
-
-	
 };
 
 class Client : public Account
@@ -83,7 +72,6 @@ public:
 int main()
 {
 	vector<Client*> ClientVector;
-	vector<Staff*> StaffVector;
 
 	Client* ptrC1 = new Client(3, "Deuville", "William", 26);
 	Client* ptrC2 = new Client(7, "McDonald", "Stacey", 54);
@@ -92,22 +80,18 @@ int main()
 	ClientVector.push_back(ptrC2);
 	ClientVector.push_back(ptrC3);
 
-	Staff* ptrS1 = new Staff(242, "KuangThu", "Bruce", 32);
-	Staff* ptrS2 = new Staff(130, "McDonald", "Amanda", 38);
-	StaffVector.push_back(ptrS1);
-	StaffVector.push_back(ptrS2);
+	bool tmp = false;
 
-	bool tmp = true;
-
-	while (!true)
+	while (!tmp)
 	{
 		cout << "1. Client" << "\n2. Staff" << "\n0" << endl;
-		char choice;
+		int choice;
 		cout << "Enter the number: " << endl;
 		cin >> choice;
 		switch (choice)
 		{
 		case 1:
+		{
 			string FName, LName;
 			int Ag, Id;
 
@@ -130,7 +114,7 @@ int main()
 			bool var = false;
 			while (!var)
 			{
-				char num;
+				int num;
 				cout << "What woulde you like? Please enter number." << endl;
 				cout << "1. Credit.\n2. Debit.\n0. Quite." << endl;
 				cin >> num;
@@ -162,22 +146,26 @@ int main()
 					break;
 				}
 			}
-			delete Dmitry;
+			
+		}
 			break;
 
 		case 2:
+		{
 			cout << "\n1. Print the clients" << "\n0. Quite" << endl;
 			cout << "Enter the number" << endl;
 			bool var1 = false;
-			char num1;
+			int num1;
 			cin >> num1;
 			while (!var1)
 			{
 				switch (num1)
 				{
 				case 1:
+				{
 					for_each(ClientVector.begin(),
 						ClientVector.end(), displayAccount());
+				}
 					break;
 				case 0:
 					var1++;
@@ -187,10 +175,13 @@ int main()
 					break;
 				}
 			}
+		}
 			break;
 
 		case 0:
+		{
 			tmp++;
+		}
 			break;
 		default:
 			cout << "Your choice is incorrect. Please enter the number again." << endl;
