@@ -27,43 +27,59 @@ public:
 		return;
 	}
 
-
-
+	///<summary>
+	/// Геттер ID
+	///</summary>
 	int getId()
 	{
 		return ID;
 	}
-
+	///<summary>
+	/// Геттер FirstName
+	///</summary>
 	string getFirstName()
 	{
 		return FirstName;
 	}
 
+	///<summary>
+	/// Геттер LastName
+	///</summary>
 	string getLastName()
 	{
 		return LastName;
 	}
-
+	///<summary>
+	/// Геттер Age
+	///</summary>
 	int getAge()
 	{
 		return Age;
 	}
-
+	///<summary>
+	/// Сеттер ID
+	///</summary>
 	void setId(int id)
 	{
 		ID = id;
 	}
-
+	///<summary>
+	/// Сеттер FirstName
+	///</summary>
 	void setFirstName(string firstName)
 	{
 		FirstName = firstName;
 	}
-	
+	///<summary>
+	/// Сеттер LastName
+	///</summary>
 	void setLastName(string lastName)
 	{
 		LastName = lastName;
 	}
-
+	///<summary>
+	/// Сеттер Age
+	///</summary>
 	void setAge(int age)
 	{
 		Age = age;
@@ -90,19 +106,15 @@ private:
 public:
 
 	Client(int ID_, string Last_Name, string  First_Name, int Age_) : Account(ID_, Last_Name, First_Name, Age_)
-	{}
-
+	{}	
 	void setBalance(double _balance)
 	{
 		balance = _balance;
 	}
-
-
 	double getBalance()
 	{
 		return balance;
 	}
-
 	double credit(double _credit)
 	{
 		return balance += _credit;
@@ -115,17 +127,31 @@ public:
 };
 
 
+
+///<summary>
+/// Класс описывающий банк
+///</summary>
 class Bank
 {
 private:
+///<summary>
+/// Вектор клиентов банка
+///</summary>
 	vector<Client> _clients;
 
 public:
+///<summary>
+/// Добавляет клиента в базу
+///</summary>
 	void add(Client client)
 	{
 		_clients.push_back(client);
 	}
 
+
+///<summary>
+/// Выводит всех клиентов банка
+///</summary>
 	void print()
 	{
 		for (auto it : _clients)
@@ -133,42 +159,48 @@ public:
 			it.getFullInf();
 		}
 	}
-
+	///<summary>
+	/// Сохраняет клиентов в базу из файла file.txt
+	///</summary>
 	void save()
 	{
-		std::ofstream fp;
-		fp.open("file.txt", std::ios_base::trunc | std::ios::out);
-		for (auto it : _clients)
+		ofstream fp;//Файловый поток записи
+		fp.open("file.txt", ios_base::trunc | ios::out);//Открытие файла и очистка его содержимого
+		for (auto it : _clients)//Перебор вектора клентов
 		{
+			//Запись в поток
 			fp << it.getId() << " ";
 			fp << it.getFirstName() << " ";
 			fp << it.getLastName() << " ";
-			if ((*(_clients.end() - 1)).getId() == it.getId())fp << it.getAge();
+			if ((*(_clients.end() - 1)).getId() == it.getId())fp << it.getAge();//Если поеследний элемент - не делать переход на новую строку
 			else fp << it.getAge() << std::endl;
 		}
-		fp.close();
+		fp.close();//Закрыть файл
 	}
 
-
+///<summary>
+/// Загружает клиентов из файла file.txt в базу
+///</summary>
 	void load()
 	{
-		std::ifstream fp;
-		fp.open("file.txt");
-		while (!fp.eof())
+		ifstream fp;//Файловый поток чтения
+		fp.open("file.txt");//Открытие файла
+		while (!fp.eof())//Пока не конец файла
 		{
 			int id;
 			string firstName;
 			string lastName;
 			int age;
 
+			//Инициализация переменных из файлового потока
 			fp >> id;
 			fp >> firstName;
 			fp >> lastName;
 			fp >> age;
-
+			//Добавить клиента в базу
 			_clients.push_back(Client(id, lastName, firstName, age));
 		}
-		fp.close();
+		fp.close();//Закрыть файл
 	}
 };
 
@@ -176,9 +208,9 @@ public:
 
 int main()
 {
-	auto bank = Bank();
+	auto bank = Bank();//Банк
 
-	bank.load();
+	bank.load();//Загрузка банка
 
 	bool tmp = false;
 	int choice = -1;
@@ -296,6 +328,6 @@ int main()
 		}
 
 	}
-	bank.save();
+	bank.save();//Сохранение банка
 	return 0;
 }
