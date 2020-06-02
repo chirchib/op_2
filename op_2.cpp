@@ -2,6 +2,8 @@
 #include <vector>
 #include <algorithm>
 #include <conio.h>
+#include <fstream>
+
 using namespace std;
 
 
@@ -21,9 +23,52 @@ public:
 
 	void getFullInf() const
 	{
-		cout << Age << "\t" <<LastName << "\t" << FirstName << endl;
+		cout << Age << "\t" << LastName << "\t" << FirstName << endl;
 		return;
 	}
+
+
+
+	int getId()
+	{
+		return ID;
+	}
+
+	string getFirstName()
+	{
+		return FirstName;
+	}
+
+	string getLastName()
+	{
+		return LastName;
+	}
+
+	int getAge()
+	{
+		return Age;
+	}
+
+	void setId(int id)
+	{
+		ID = id;
+	}
+
+	void setFirstName(string firstName)
+	{
+		FirstName = firstName;
+	}
+	
+	void setLastName(string lastName)
+	{
+		LastName = lastName;
+	}
+
+	void setAge(int age)
+	{
+		Age = age;
+	}
+
 
 };
 
@@ -40,7 +85,7 @@ class Client : public Account
 {
 private:
 
-	double balance;
+	double balance = 0;
 
 public:
 
@@ -70,21 +115,73 @@ public:
 };
 
 
+class Bank
+{
+private:
+	vector<Client> _clients;
+
+public:
+	void add(Client client)
+	{
+		_clients.push_back(client);
+	}
+
+	void print()
+	{
+		for (auto it : _clients)
+		{
+			it.getFullInf();
+		}
+	}
+
+	void save()
+	{
+		std::ofstream fp;
+		fp.open("file.txt", std::ios_base::trunc | std::ios::out);
+		for (auto it : _clients)
+		{
+			fp << it.getId() << " ";
+			fp << it.getFirstName() << " ";
+			fp << it.getLastName() << " ";
+			if ((*(_clients.end() - 1)).getId() == it.getId())fp << it.getAge();
+			else fp << it.getAge() << std::endl;
+		}
+		fp.close();
+	}
+
+
+	void load()
+	{
+		std::ifstream fp;
+		fp.open("file.txt");
+		while (!fp.eof())
+		{
+			int id;
+			string firstName;
+			string lastName;
+			int age;
+
+			fp >> id;
+			fp >> firstName;
+			fp >> lastName;
+			fp >> age;
+
+			_clients.push_back(Client(id, lastName, firstName, age));
+		}
+		fp.close();
+	}
+};
+
+
+
 int main()
 {
-	vector<Client*> ClientVector;
+	auto bank = Bank();
 
-	Client* ptrC1 = new Client(3, "Deuville", "William", 26);
-	Client* ptrC2 = new Client(7, "McDonald", "Stacey", 54);
-	Client* ptrC3 = new Client(12, "Fredericks", "Roger", 38);
-	ClientVector.push_back(ptrC1);
-	ClientVector.push_back(ptrC2);
-	ClientVector.push_back(ptrC3);
+	bank.load();
 
 	bool tmp = false;
 	int choice = -1;
-
-	
 
 	while (!tmp)
 	{
@@ -109,12 +206,14 @@ int main()
 			cin >> Ag;
 			cout << "Welcome " << LName << " " << FName << endl;
 
-			Client* Dmitry = new Client(Id, LName, FName, Ag);
-			ClientVector.push_back(Dmitry);
+			auto client = Client(Id, LName, FName, Ag);
+			
 			cout << "Please enter the opening balance of the account." << endl;
 			double bill;
 			cin >> bill;
-			Dmitry->setBalance(bill);
+			client.setBalance(bill);
+
+			
 			bool var = false;
 			while (!var)
 			{
@@ -129,19 +228,19 @@ int main()
 					double putMoney;
 					cout << "How much do you want to put money into the account?" << endl;
 					cin >> putMoney;
-					cout << "Your current account balance is - " << Dmitry->credit(putMoney) << "$" << endl;
+					cout << "Your current account balance is - " << client.credit(putMoney) << "$" << endl;
 					break;
 				case 2:
 					double withdrawMoney;
 					cout << "How much do you want to withdraw money from the account?" << endl;
 					cin >> withdrawMoney;
-					if (withdrawMoney > Dmitry->getBalance())
+					if (withdrawMoney > client.getBalance())
 					{
 						cout << "The requested amount exceeds the account balance." << endl;
 						break;
 					}
 					else
-						cout << "Your current account balance is - " << Dmitry->debit(withdrawMoney) << "$" << endl;
+						cout << "Your current account balance is - " << client.debit(withdrawMoney) << "$" << endl;
 					break;
 				case 0:
 					var++;
@@ -151,27 +250,29 @@ int main()
 					break;
 				}
 			}
+			bank.add(client);
 			
 		}
 			break;
 
 		case 2:
 		{
-			system("cls");
-			cout << "1. Print the clients" << "\n0. Back" << endl;
-			bool var1 = false;
-			int num1;
-			num1 = _getch() - 48;
-			while (!var1)
+			int num1 = -1;
+			while (num1 != 0)
 			{
+				system("cls");
+				cout << "1. Print the clients" << "\n0. Back" << endl;
+				bool var1 = false;
+				
+				num1 = _getch() - 48;
 				switch (num1)
 				{
 				case 1:
 				{
-					for_each(ClientVector.begin(),
-						ClientVector.end(), displayAccount());
+					bank.print();
+					system("pause");
 				}
-					break;
+				break;
 				case 0:
 					var1++;
 					break;
@@ -180,8 +281,9 @@ int main()
 					break;
 				}
 			}
-		}
 			break;
+		}
+			
 
 		case 0:
 		{
@@ -194,6 +296,6 @@ int main()
 		}
 
 	}
-
+	bank.save();
 	return 0;
 }
